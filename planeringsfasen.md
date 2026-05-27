@@ -21,4 +21,4 @@ Utifrån detta tog vi fram fyra enkla säkerhetskrav:
 
 4. Endast inloggade användare får göra något
 
-Tillsammans ger detta en tydlig säkerhetsgrund inför nästa steg: kodgranskning och säkerhetstestning.
+Tillsammans ger detta en tydlig säkerhetsgrund inför nästa steg: kodgranskning och säkerhetstestning. 
