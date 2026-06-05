@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Message App Security Demo</title>
+    <style>
+      :root {
+        --ink: #171717;
+        --muted: #5d6472;
+        --paper: #fffaf0;
+        --panel: #ffffff;
+        --line: #242424;
+        --mint: #9ee8c9;
+        --coral: #ff8f70;
+        --sky: #9fd7ff;
+        --lemon: #ffe66d;
+        --rose: #ffbfd2;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--ink);
+        font-family: Arial, Helvetica, sans-serif;
+        background:
+          linear-gradient(90deg, rgba(23, 23, 23, 0.05) 1px, transparent 1px),
+          linear-gradient(rgba(23, 23, 23, 0.05) 1px, transparent 1px),
+          var(--paper);
+        background-size: 28px 28px;
+      }
+
+      header {
+        min-height: 92vh;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+        gap: 36px;
+        align-items: center;
+        padding: 42px clamp(18px, 5vw, 72px) 28px;
+      }
+
+      main {
+        padding: 0 clamp(18px, 5vw, 72px) 54px;
+      }
+
+      h1 {
+        margin: 0;
+        max-width: 780px;
+        font-size: clamp(44px, 8vw, 102px);
+        line-height: 0.95;
+        letter-spacing: 0;
+      }
+
+      h2 {
+        margin: 0 0 16px;
+        font-size: 28px;
+      }
+
+      h3 {
+        margin: 0 0 8px;
+        font-size: 19px;
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      button {
+        min-height: 44px;
+        border: 2px solid var(--line);
+        background: var(--lemon);
+        color: var(--ink);
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 4px 4px 0 var(--line);
+        transition: transform 120ms ease, box-shadow 120ms ease;
+      }
+
+      button:hover {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0 var(--line);
+      }
+
+      .lead {
+        max-width: 680px;
+        margin-top: 22px;
+        font-size: 20px;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 30px;
+      }
+
+      .actions button {
+        padding: 0 20px;
+      }
+
+      .stage {
+        border: 3px solid var(--line);
+        background: var(--panel);
+        box-shadow: 10px 10px 0 var(--line);
+        padding: 22px;
+      }
+
+      .phone {
+        border: 3px solid var(--line);
+        background: #fbfbfb;
+        padding: 16px;
+        min-height: 520px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        border-bottom: 2px solid var(--line);
+        padding-bottom: 12px;
+        font-weight: 800;
+      }
+
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--ink);
+      }
+
+      .dot {
+        width: 12px;
+        height: 12px;
+        border: 2px solid var(--line);
+        background: var(--coral);
+        display: inline-block;
+      }
+
+      .dot.on {
+        background: var(--mint);
+      }
+
+      .message-box {
+        border: 2px solid var(--line);
+        padding: 14px;
+        background: var(--sky);
+      }
+
+      .message-box:nth-child(3) {
+        background: var(--rose);
+      }
+
+      .message-box:nth-child(4) {
+        background: var(--mint);
+      }
+
+      .composer {
+        margin-top: auto;
+        display: grid;
+        gap: 10px;
+      }
+
+      textarea,
+      input {
+        width: 100%;
+        border: 2px solid var(--line);
+        padding: 12px;
+        font: inherit;
+        background: #fff;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 24px;
+      }
+
+      .card {
+        min-height: 240px;
+        border: 3px solid var(--line);
+        background: var(--panel);
+        padding: 18px;
+        box-shadow: 6px 6px 0 var(--line);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .card:nth-child(1) {
+        background: var(--mint);
+      }
+
+      .card:nth-child(2) {
+        background: var(--lemon);
+      }
+
+      .card:nth-child(3) {
+        background: var(--sky);
+      }
+
+      .card:nth-child(4) {
+        background: var(--rose);
+      }
+
+      .badge {
+        width: fit-content;
+        border: 2px solid var(--line);
+        background: #fff;
+        padding: 5px 8px;
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .demo-panel {
+        margin-top: 44px;
+        border: 3px solid var(--line);
+        background: #fff;
+        box-shadow: 8px 8px 0 var(--line);
+        padding: 22px;
+      }
+
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 18px 0;
+      }
+
+      .controls button {
+        padding: 0 16px;
+        background: #fff;
+      }
+
+      .controls button.active {
+        background: var(--coral);
+      }
+
+      .terminal {
+        border: 2px solid var(--line);
+        min-height: 160px;
+        padding: 16px;
+        background: #171717;
+        color: #f7f7f7;
+        font-family: "Courier New", monospace;
+        white-space: pre-wrap;
+        line-height: 1.45;
+      }
+
+      .timer {
+        margin-top: 12px;
+        height: 18px;
+        border: 2px solid var(--line);
+        background: #fff;
+        overflow: hidden;
+      }
+
+      .timer span {
+        display: block;
+        width: 100%;
+        height: 100%;
+        background: var(--mint);
+        transform-origin: left;
+        animation: countdown 12s linear infinite;
+      }
+
+      @keyframes countdown {
+        from {
+          transform: scaleX(1);
+        }
+        to {
+          transform: scaleX(0);
+        }
+      }
+
+      @media (max-width: 900px) {
+        header {
+          grid-template-columns: 1fr;
+          min-height: auto;
+        }
+
+        .grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 560px) {
+        h1 {
+          font-size: 42px;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <section>
+        <h1>YH Message App</h1>
+        <p class="lead">
+          En liten, glad meddelandeapp med stora säkerhetsvanor: starka lösenord,
+          bcrypt, JWT, rate limiting och skyddade routes.
+        </p>
+        <div class="actions">
+          <button type="button" onclick="showDemo('login')">Visa login</button>
+          <button type="button" onclick="showDemo('security')">Visa säkerhet</button>
+          <button type="button" onclick="showDemo('delete')">Visa delete-skydd</button>
+        </div>
+      </section>
+
+      <aside class="stage" aria-label="Appförhandsvisning">
+        <div class="phone">
+          <div class="topbar">
+            <span>Messages</span>
+            <span class="status"><span class="dot on"></span>Inloggad</span>
+          </div>
+          <div class="message-box">
+            <strong>Ada</strong>
+            <p>Jag kan bara ändra mina egna meddelanden.</p>
+          </div>
+          <div class="message-box">
+            <strong>Sam</strong>
+            <p>Min token går ut och sessionen loggas ut vid inaktivitet.</p>
+          </div>
+          <div class="message-box">
+            <strong>Mira</strong>
+            <p>Brute force får ta kölapp bakom rate limit.</p>
+          </div>
+          <div class="composer">
+            <textarea rows="3" aria-label="Demo message">Vad gör dig glad just nu?</textarea>
+            <button type="button" onclick="showDemo('post')">Skicka demo</button>
+          </div>
+        </div>
+      </aside>
+    </header>
+
+    <main>
+      <section>
+        <h2>Fyra saker vi kan demonstrera</h2>
+        <div class="grid">
+          <article class="card">
+            <span class="badge">Krav 1</span>
+            <h3>30 min inaktivitet</h3>
+            <p>Frontend bevakar aktivitet och loggar ut användaren när sessionen varit tyst för länge.</p>
+          </article>
+          <article class="card">
+            <span class="badge">Krav 2</span>
+            <h3>Starka lösenord</h3>
+            <p>Registrering kräver minst 8 tecken, siffra och specialtecken. Bcrypt sparar hash, inte klartext.</p>
+          </article>
+          <article class="card">
+            <span class="badge">Krav 3</span>
+            <h3>Rate limiting</h3>
+            <p>Login skyddas med max antal försök per tidsfönster, så brute force blir mycket svårare.</p>
+          </article>
+          <article class="card">
+            <span class="badge">Krav 4</span>
+            <h3>Skyddade routes</h3>
+            <p>Skapa, ändra och radera kräver token. Radera kontrollerar även att användaren äger meddelandet.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="demo-panel">
+        <h2>Redovisningsläge</h2>
+        <p>Klicka på en knapp och använd texten som stöd när ni visar koden.</p>
+        <div class="controls">
+          <button type="button" class="active" data-demo="login" onclick="showDemo('login')">Login</button>
+          <button type="button" data-demo="password" onclick="showDemo('password')">Lösenord</button>
+          <button type="button" data-demo="rate" onclick="showDemo('rate')">Rate limit</button>
+          <button type="button" data-demo="delete" onclick="showDemo('delete')">Delete</button>
+          <button type="button" data-demo="timer" onclick="showDemo('timer')">Timer</button>
+        </div>
+        <div id="terminal" class="terminal" aria-live="polite"></div>
+        <div class="timer" aria-hidden="true"><span></span></div>
+      </section>
+    </main>
+
+    <script>
+      const demos = {
+        login:
+          "POST /login\n" +
+          "1. Användaren skriver username/email och lösenord.\n" +
+          "2. Backend jämför lösenordet med bcrypt.compare().\n" +
+          "3. Vid rätt lösenord skapas en JWT-token med expiresIn: 30m.",
+        password:
+          "POST /register\n" +
+          "Lösenordet måste ha minst 8 tecken, minst en siffra och minst ett specialtecken.\n" +
+          "Sedan körs bcrypt.hash(password, 10) innan användaren sparas.",
+        rate:
+          "Rate limiting\n" +
+          "Login-routen använder express-rate-limit.\n" +
+          "Efter för många försök från samma IP skickas ett stopp-svar istället för att fortsätta testa lösenord.",
+        delete:
+          "DELETE /messages/:id\n" +
+          "1. authenticateUser kräver giltig token.\n" +
+          "2. Servern hämtar meddelandet.\n" +
+          "3. message.user jämförs med req.user._id.\n" +
+          "Resultat: bara ägaren får radera sitt eget meddelande.",
+        timer:
+          "30 minuter inaktivitet\n" +
+          "Frontend lyssnar på aktivitet: click, keydown, scroll, mousemove och touchstart.\n" +
+          "När inget händer på 30 minuter körs logout och användaren får logga in igen.",
+        security:
+          "Säkerhetskedjan\n" +
+          "Helmet skyddar headers.\n" +
+          "JWT visar vem användaren är.\n" +
+          "Bcrypt skyddar lösenord.\n" +
+          "Rate limit bromsar attacker.\n" +
+          "Ägarskontroll stoppar fel användare från att ändra data.",
+        post:
+          "POST /messages\n" +
+          "Frontend skickar Authorization: Bearer <token>.\n" +
+          "Backend lägger req.user._id på meddelandet, så ägarskapet sparas direkt."
+      }
+
+      const terminal = document.querySelector("#terminal")
+      const buttons = document.querySelectorAll(".controls button")
+
+      function showDemo(name) {
+        terminal.textContent = demos[name]
+
+        buttons.forEach((button) => {
+          const isActive = button.dataset.demo === name
+          button.classList.toggle("active", isActive)
+        })
+      }
+
+      showDemo("login")
+    </script>
+  </body>
+</html>
