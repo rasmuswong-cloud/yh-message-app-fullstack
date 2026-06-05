@@ -45,14 +45,24 @@ app.post("/register", async (req, res) => {
       })
     }
 
+    // 🔐 SÄKERHETSKRAV 2:
+    // Här saknas lösenordsvalidering (styrka).
+    // bcrypt skyddar lagringen, men svaga lösenord måste stoppas innan hashning.
+    // Exempel på fix (läggs till i fas 3):
+    // const pwRegex = /^(?=.*[0-9])(?=.*[!@#$%])[A-Za-z0-9!@#$%]{8,}$/;
+    // if (!pwRegex.test(password)) return res.status(400).json({ error: "Weak password" });
+
     const hashedPassword = await bcrypt.hash(password, 10)
     const user = new User({ username: username.trim(), email, password: hashedPassword })
     await user.save()
 
+    // 🔐 SÄKERHETSKRAV 1:
+    // Token lever 2h → ska ändras till 30m enligt kravspecifikation.
+    // Notering: JWT är inte inaktivitetsbaserad, bara fast livslängd.
     const accessToken = jwt.sign(
       { userId: user._id, username: user.username },
       process.env.JWT_SECRET,
-      { expiresIn: "2h" }
+      { expiresIn: "30m" } // ÄNDRAS TILL "30m"
     )
 
     res.status(201).json({
@@ -97,10 +107,12 @@ app.post("/login", async (req, res) => {
       })
     }
 
+    // 🔐 SÄKERHETSKRAV 1:
+    // Samma ändring som i /register — ändra 2h → 30m.
     const accessToken = jwt.sign(
       { userId: user._id, username: user.username },
       process.env.JWT_SECRET,
-      { expiresIn: "2h" }
+      { expiresIn: "30m" } // ÄNDRAS TILL "30m"
     )
 
     res.json({
@@ -125,6 +137,10 @@ const isValidId = (id) => mongoose.Types.ObjectId.isValid(id)
 
 app.get("/messages", async (req, res) => {
   try {
+    // 🔐 SÄKERHETSKRAV 4:
+    // Denna route saknar authenticateUser → alla kan läsa alla meddelanden.
+    // Kravet säger att användaren måste vara inloggad för att göra något.
+    // I fas 3 bör authenticateUser läggas här.
     const messages = await Message.find()
       .sort({ createdAt: "desc" })
       .limit(20)
@@ -166,6 +182,10 @@ app.patch("/messages/:id", authenticateUser, async (req, res) => {
 })
 
 app.delete("/messages/:id", async (req, res) => {
+  // 🔐 SÄKERHETSKRAV 4 — KRITISKT SÄKERHETSHÅL:
+  // authenticateUser saknas → vem som helst kan radera vilket meddelande som helst.
+  // Detta är Broken Access Control (OWASP #1).
+  // I fas 3 ska authenticateUser läggas här.
   if (!isValidId(req.params.id)) return res.status(400).json({ error: "Invalid message ID" })
   try {
     const message = await Message.findById(req.params.id)
