@@ -3,443 +3,1050 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Message App Security Demo</title>
+    <title>YH Message App Security Demo</title>
     <style>
       :root {
-        --ink: #171717;
-        --muted: #5d6472;
-        --paper: #fffaf0;
-        --panel: #ffffff;
-        --line: #242424;
-        --mint: #9ee8c9;
+        --ink: #121212;
+        --paper: #fff8e8;
+        --white: #ffffff;
+        --muted: #5f6673;
+        --mint: #8ce6bd;
+        --blue: #8fcfff;
+        --pink: #ffb8cf;
+        --yellow: #ffe66d;
         --coral: #ff8f70;
-        --sky: #9fd7ff;
-        --lemon: #ffe66d;
-        --rose: #ffbfd2;
+        --bad: #ff6b6b;
+        --dark: #0d1b2a;
+        --shadow: 7px 7px 0 #121212;
       }
 
       * {
         box-sizing: border-box;
       }
 
+      html {
+        scroll-behavior: smooth;
+      }
+
       body {
         margin: 0;
-        min-height: 100vh;
         color: var(--ink);
         font-family: Arial, Helvetica, sans-serif;
         background:
-          linear-gradient(90deg, rgba(23, 23, 23, 0.05) 1px, transparent 1px),
-          linear-gradient(rgba(23, 23, 23, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(18, 18, 18, 0.05) 1px, transparent 1px),
+          linear-gradient(rgba(18, 18, 18, 0.05) 1px, transparent 1px),
           var(--paper);
-        background-size: 28px 28px;
+        background-size: 30px 30px;
+      }
+
+      body.site-closed {
+        overflow: hidden;
+        background: var(--dark);
+      }
+
+      header,
+      main {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
       }
 
       header {
-        min-height: 92vh;
+        min-height: 62vh;
         display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
-        gap: 36px;
+        grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+        gap: 34px;
         align-items: center;
-        padding: 42px clamp(18px, 5vw, 72px) 28px;
+        padding: 44px 0 28px;
       }
 
-      main {
-        padding: 0 clamp(18px, 5vw, 72px) 54px;
+      h1,
+      h2,
+      h3,
+      p,
+      ul {
+        margin: 0;
       }
 
       h1 {
-        margin: 0;
-        max-width: 780px;
-        font-size: clamp(44px, 8vw, 102px);
-        line-height: 0.95;
+        font-size: clamp(44px, 8vw, 98px);
+        line-height: 0.92;
         letter-spacing: 0;
       }
 
       h2 {
-        margin: 0 0 16px;
-        font-size: 28px;
+        font-size: clamp(28px, 4vw, 46px);
+        line-height: 1;
+        letter-spacing: 0;
       }
 
       h3 {
-        margin: 0 0 8px;
-        font-size: 19px;
+        font-size: 22px;
+        line-height: 1.1;
       }
 
-      p {
-        margin: 0;
+      p,
+      li {
         color: var(--muted);
-        line-height: 1.55;
+        line-height: 1.5;
+      }
+
+      ul {
+        padding-left: 20px;
+      }
+
+      button,
+      input,
+      textarea {
+        font: inherit;
       }
 
       button {
         min-height: 44px;
-        border: 2px solid var(--line);
-        background: var(--lemon);
+        border: 3px solid var(--ink);
+        background: var(--yellow);
         color: var(--ink);
-        font: inherit;
-        font-weight: 700;
+        padding: 0 16px;
+        font-weight: 900;
         cursor: pointer;
-        box-shadow: 4px 4px 0 var(--line);
+        box-shadow: 4px 4px 0 var(--ink);
         transition: transform 120ms ease, box-shadow 120ms ease;
       }
 
-      button:hover {
+      button:hover:not(:disabled) {
         transform: translate(2px, 2px);
-        box-shadow: 2px 2px 0 var(--line);
+        box-shadow: 2px 2px 0 var(--ink);
+      }
+
+      button:disabled,
+      input:disabled,
+      textarea:disabled {
+        cursor: not-allowed;
+        opacity: 0.58;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        border: 3px solid var(--ink);
+        background: #fffdf6;
+        color: var(--ink);
+        padding: 12px;
+      }
+
+      code,
+      pre {
+        font-family: "Courier New", Consolas, monospace;
+      }
+
+      pre {
+        white-space: pre-wrap;
+        margin: 0;
+        border: 3px solid var(--ink);
+        background: var(--dark);
+        color: #f7fbff;
+        padding: 12px;
+        line-height: 1.35;
+        overflow-wrap: anywhere;
+      }
+
+      .eyebrow {
+        display: inline-block;
+        border: 3px solid var(--ink);
+        background: var(--mint);
+        box-shadow: 4px 4px 0 var(--ink);
+        padding: 8px 12px;
+        margin-bottom: 20px;
+        font-weight: 900;
       }
 
       .lead {
         max-width: 680px;
         margin-top: 22px;
-        font-size: 20px;
+        font-size: 21px;
       }
 
-      .actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 14px;
-        margin-top: 30px;
+      .hero-card,
+      .slide-card,
+      .demo {
+        border: 4px solid var(--ink);
+        background: var(--white);
+        box-shadow: var(--shadow);
       }
 
-      .actions button {
-        padding: 0 20px;
+      .hero-card {
+        padding: 18px;
+        transform: rotate(1deg);
       }
 
-      .stage {
-        border: 3px solid var(--line);
-        background: var(--panel);
-        box-shadow: 10px 10px 0 var(--line);
-        padding: 22px;
+      .screen {
+        border: 3px solid var(--ink);
+        overflow: hidden;
+        background: #fff;
       }
 
-      .phone {
-        border: 3px solid var(--line);
-        background: #fbfbfb;
-        padding: 16px;
-        min-height: 520px;
-        display: flex;
-        flex-direction: column;
-        gap: 14px;
-      }
-
-      .topbar {
+      .screen-top {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         gap: 12px;
-        align-items: center;
-        border-bottom: 2px solid var(--line);
-        padding-bottom: 12px;
-        font-weight: 800;
-      }
-
-      .status {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        color: var(--ink);
-      }
-
-      .dot {
-        width: 12px;
-        height: 12px;
-        border: 2px solid var(--line);
-        background: var(--coral);
-        display: inline-block;
-      }
-
-      .dot.on {
-        background: var(--mint);
-      }
-
-      .message-box {
-        border: 2px solid var(--line);
-        padding: 14px;
-        background: var(--sky);
-      }
-
-      .message-box:nth-child(3) {
-        background: var(--rose);
-      }
-
-      .message-box:nth-child(4) {
-        background: var(--mint);
-      }
-
-      .composer {
-        margin-top: auto;
-        display: grid;
-        gap: 10px;
-      }
-
-      textarea,
-      input {
-        width: 100%;
-        border: 2px solid var(--line);
+        border-bottom: 3px solid var(--ink);
+        background: var(--blue);
         padding: 12px;
-        font: inherit;
-        background: #fff;
+        font-weight: 900;
       }
 
-      .grid {
+      .session-pill {
+        border: 3px solid var(--ink);
+        background: var(--mint);
+        padding: 6px 10px;
+      }
+
+      .screen-body {
         display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 18px;
-        margin-top: 24px;
+        gap: 12px;
+        padding: 14px;
       }
 
-      .card {
-        min-height: 240px;
-        border: 3px solid var(--line);
-        background: var(--panel);
+      .fake-message {
+        border: 3px solid var(--ink);
+        box-shadow: 4px 4px 0 var(--ink);
+        padding: 13px;
+        background: var(--pink);
+      }
+
+      .fake-message:nth-child(2) {
+        background: var(--mint);
+      }
+
+      .fake-message:nth-child(3) {
+        background: var(--yellow);
+      }
+
+      .section-title {
+        margin: 42px 0 18px;
+      }
+
+      .presentation-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .slide-card {
+        min-height: 320px;
         padding: 18px;
-        box-shadow: 6px 6px 0 var(--line);
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 14px;
       }
 
-      .card:nth-child(1) {
+      .slide-card:nth-child(1) {
+        grid-column: 1 / -1;
+        min-height: 260px;
+        background: var(--dark);
+        color: var(--white);
+      }
+
+      .slide-card:nth-child(1) p,
+      .slide-card:nth-child(1) li {
+        color: #d7e6f2;
+      }
+
+      .slide-card:nth-child(2) {
+        background: var(--blue);
+      }
+
+      .slide-card:nth-child(3) {
         background: var(--mint);
       }
 
-      .card:nth-child(2) {
-        background: var(--lemon);
+      .slide-card:nth-child(4) {
+        background: var(--yellow);
       }
 
-      .card:nth-child(3) {
-        background: var(--sky);
+      .slide-card:nth-child(5) {
+        background: var(--pink);
       }
 
-      .card:nth-child(4) {
-        background: var(--rose);
-      }
-
-      .badge {
-        width: fit-content;
-        border: 2px solid var(--line);
-        background: #fff;
-        padding: 5px 8px;
-        font-size: 13px;
-        font-weight: 800;
-      }
-
-      .demo-panel {
-        margin-top: 44px;
-        border: 3px solid var(--line);
-        background: #fff;
-        box-shadow: 8px 8px 0 var(--line);
-        padding: 22px;
-      }
-
-      .controls {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin: 18px 0;
-      }
-
-      .controls button {
-        padding: 0 16px;
-        background: #fff;
-      }
-
-      .controls button.active {
+      .slide-card:nth-child(6) {
         background: var(--coral);
       }
 
-      .terminal {
-        border: 2px solid var(--line);
-        min-height: 160px;
-        padding: 16px;
-        background: #171717;
-        color: #f7f7f7;
-        font-family: "Courier New", monospace;
-        white-space: pre-wrap;
-        line-height: 1.45;
+      .slide-card:nth-child(7) {
+        grid-column: 1 / -1;
+        background: var(--white);
       }
 
-      .timer {
-        margin-top: 12px;
-        height: 18px;
-        border: 2px solid var(--line);
-        background: #fff;
+      .slide-kicker,
+      .tag {
+        width: fit-content;
+        border: 3px solid var(--ink);
+        background: var(--white);
+        color: var(--ink);
+        padding: 5px 9px;
+        font-size: 14px;
+        font-weight: 900;
+      }
+
+      .slide-card:nth-child(1) .slide-kicker {
+        border-color: var(--white);
+      }
+
+      .split {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .note,
+      .result,
+      .step-status {
+        border: 3px solid var(--ink);
+        background: var(--white);
+        color: var(--ink);
+        padding: 12px;
+        font-weight: 800;
+      }
+
+      .note strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      .summary-table {
+        display: grid;
+        gap: 8px;
+      }
+
+      .summary-row {
+        display: grid;
+        grid-template-columns: 0.8fr 1fr 1fr;
+        gap: 8px;
+      }
+
+      .summary-row > span {
+        border: 3px solid var(--ink);
+        background: var(--white);
+        padding: 9px;
+        font-weight: 800;
+      }
+
+      .progress {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .progress-step {
+        border: 3px solid var(--ink);
+        background: var(--white);
+        box-shadow: 4px 4px 0 var(--ink);
+        padding: 10px;
+        font-weight: 900;
+        text-align: center;
+      }
+
+      .progress-step.active {
+        background: var(--yellow);
+      }
+
+      .progress-step.done {
+        background: var(--mint);
+      }
+
+      .demo-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+        padding-bottom: 58px;
+      }
+
+      .demo {
+        padding: 18px;
+        min-height: 430px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .demo.locked {
+        filter: grayscale(0.55);
+        opacity: 0.58;
+      }
+
+      .demo:nth-child(1) {
+        background: var(--mint);
+      }
+
+      .demo:nth-child(2) {
+        background: var(--yellow);
+      }
+
+      .demo:nth-child(3) {
+        background: var(--blue);
+      }
+
+      .demo:nth-child(4) {
+        background: var(--pink);
+      }
+
+      .row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .result {
+        min-height: 54px;
+      }
+
+      .step-status {
+        min-height: auto;
+      }
+
+      .ok {
+        background: var(--mint);
+      }
+
+      .bad {
+        background: var(--bad);
+      }
+
+      .warn {
+        background: var(--coral);
+      }
+
+      .mini-list {
+        display: grid;
+        gap: 9px;
+      }
+
+      .check {
+        border: 3px solid var(--ink);
+        background: var(--white);
+        padding: 9px;
+        font-weight: 800;
+      }
+
+      .check.done {
+        background: var(--mint);
+      }
+
+      .bar {
+        height: 22px;
+        border: 3px solid var(--ink);
+        background: var(--white);
         overflow: hidden;
       }
 
-      .timer span {
+      .bar span {
         display: block;
-        width: 100%;
         height: 100%;
-        background: var(--mint);
-        transform-origin: left;
-        animation: countdown 12s linear infinite;
+        width: 100%;
+        background: var(--coral);
+        transition: width 200ms ease;
       }
 
-      @keyframes countdown {
-        from {
-          transform: scaleX(1);
-        }
-        to {
-          transform: scaleX(0);
-        }
+      .message-card {
+        border: 3px solid var(--ink);
+        background: var(--white);
+        padding: 12px;
+      }
+
+      .message-card strong {
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      .message-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      .closed-screen {
+        position: fixed;
+        inset: 0;
+        z-index: 20;
+        display: none;
+        place-items: center;
+        padding: 24px;
+        background: var(--dark);
+        color: var(--white);
+      }
+
+      body.site-closed .closed-screen {
+        display: grid;
+      }
+
+      body.site-closed header,
+      body.site-closed main {
+        display: none;
+      }
+
+      .closed-box {
+        width: min(720px, 100%);
+        border: 4px solid var(--white);
+        background: #15283c;
+        box-shadow: 8px 8px 0 var(--bad);
+        padding: 24px;
+        display: grid;
+        gap: 16px;
+      }
+
+      .closed-box h2,
+      .closed-box p {
+        color: var(--white);
+      }
+
+      .closed-box button {
+        width: fit-content;
       }
 
       @media (max-width: 900px) {
-        header {
+        header,
+        .presentation-grid,
+        .split,
+        .demo-grid {
           grid-template-columns: 1fr;
-          min-height: auto;
         }
 
-        .grid {
+        .slide-card:nth-child(1),
+        .slide-card:nth-child(7) {
+          grid-column: auto;
+        }
+
+        .progress {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
-      }
 
-      @media (max-width: 560px) {
-        h1 {
-          font-size: 42px;
+        .summary-row {
+          grid-template-columns: 1fr;
         }
 
-        .grid {
-          grid-template-columns: 1fr;
+        .hero-card {
+          transform: none;
         }
       }
     </style>
   </head>
   <body>
+    <div class="closed-screen" role="dialog" aria-modal="true" aria-labelledby="closed-title">
+      <section class="closed-box">
+        <span class="slide-kicker">Rate limit aktiverad</span>
+        <h2 id="closed-title">Hemsidan stängdes efter 5 felaktiga försök.</h2>
+        <p>
+          Webbläsare tillåter inte alltid att en sida stängs med JavaScript om den inte öppnades av ett script.
+          Därför låser demon hela sidan som fallback. Försök med rätt lösenord eller starta om demon.
+        </p>
+        <button type="button" onclick="restartDemo()">Starta om demon</button>
+      </section>
+    </div>
+
     <header>
       <section>
-        <h1>YH Message App</h1>
+        <div class="eyebrow">Säkerhetskurs · Fas 2</div>
+        <h1>YH Message App Security Demo</h1>
         <p class="lead">
-          En liten, glad meddelandeapp med stora säkerhetsvanor: starka lösenord,
-          bcrypt, JWT, rate limiting och skyddade routes.
+          Presentationen är inbyggd först, så ni kan gå igenom kodförståelse och säkerhetsgranskning
+          innan den praktiska demon börjar.
         </p>
-        <div class="actions">
-          <button type="button" onclick="showDemo('login')">Visa login</button>
-          <button type="button" onclick="showDemo('security')">Visa säkerhet</button>
-          <button type="button" onclick="showDemo('delete')">Visa delete-skydd</button>
-        </div>
       </section>
 
-      <aside class="stage" aria-label="Appförhandsvisning">
-        <div class="phone">
-          <div class="topbar">
+      <aside class="hero-card">
+        <div class="screen">
+          <div class="screen-top">
             <span>Messages</span>
-            <span class="status"><span class="dot on"></span>Inloggad</span>
+            <span class="session-pill" id="hero-session">INLOGGAD</span>
           </div>
-          <div class="message-box">
-            <strong>Ada</strong>
-            <p>Jag kan bara ändra mina egna meddelanden.</p>
-          </div>
-          <div class="message-box">
-            <strong>Sam</strong>
-            <p>Min token går ut och sessionen loggas ut vid inaktivitet.</p>
-          </div>
-          <div class="message-box">
-            <strong>Mira</strong>
-            <p>Brute force får ta kölapp bakom rate limit.</p>
-          </div>
-          <div class="composer">
-            <textarea rows="3" aria-label="Demo message">Vad gör dig glad just nu?</textarea>
-            <button type="button" onclick="showDemo('post')">Skicka demo</button>
+          <div class="screen-body">
+            <article class="fake-message">
+              <strong>Mario</strong>
+              <p>Visar lösenordsvalidering och bcrypt.</p>
+            </article>
+            <article class="fake-message">
+              <strong>Sally</strong>
+              <p>Testar rate limiting med riktiga försök.</p>
+            </article>
+            <article class="fake-message">
+              <strong>Rasmus</strong>
+              <p>Visar auth, ägarskap och automatisk utloggning.</p>
+            </article>
           </div>
         </div>
       </aside>
     </header>
 
     <main>
-      <section>
-        <h2>Fyra saker vi kan demonstrera</h2>
-        <div class="grid">
-          <article class="card">
-            <span class="badge">Krav 1</span>
-            <h3>30 min inaktivitet</h3>
-            <p>Frontend bevakar aktivitet och loggar ut användaren när sessionen varit tyst för länge.</p>
-          </article>
-          <article class="card">
-            <span class="badge">Krav 2</span>
-            <h3>Starka lösenord</h3>
-            <p>Registrering kräver minst 8 tecken, siffra och specialtecken. Bcrypt sparar hash, inte klartext.</p>
-          </article>
-          <article class="card">
-            <span class="badge">Krav 3</span>
-            <h3>Rate limiting</h3>
-            <p>Login skyddas med max antal försök per tidsfönster, så brute force blir mycket svårare.</p>
-          </article>
-          <article class="card">
-            <span class="badge">Krav 4</span>
-            <h3>Skyddade routes</h3>
-            <p>Skapa, ändra och radera kräver token. Radera kontrollerar även att användaren äger meddelandet.</p>
-          </article>
-        </div>
+      <div class="section-title">
+        <h2>Presentation</h2>
+      </div>
+
+      <section class="presentation-grid" aria-label="Innehåll från fas 2-presentation">
+        <article class="slide-card">
+          <span class="slide-kicker">Slide 1</span>
+          <h2>Säkerhetskurs Fas 2</h2>
+          <p>Kodförståelse & säkerhetsgranskning av YH Message App.</p>
+          <p>Express + MongoDB + React · JWT Auth</p>
+          <p><strong>Mario · Rasmus · Sally</strong></p>
+        </article>
+
+        <article class="slide-card">
+          <span class="slide-kicker">Slide 2</span>
+          <h3>Vad vi granskade</h3>
+          <div class="mini-list">
+            <div class="note"><strong>backend/server.js</strong>Alla API-routes: register, login och meddelanden.</div>
+            <div class="note"><strong>backend/middleware/auth.js</strong>JWT-verifiering som skyddar privata routes.</div>
+            <div class="note"><strong>backend/models/User.js</strong>Användarschema där lösenord lagras som bcrypt-hash.</div>
+          </div>
+          <p>Fokus: backend = Zon 2 i ESTRID, där logik och säkerhetsbeslut sker.</p>
+        </article>
+
+        <article class="slide-card">
+          <span class="slide-kicker">Slide 3</span>
+          <h3>Krav 1 · Automatisk utloggning</h3>
+          <div class="split">
+            <pre>FÖRE
+expiresIn: "2h"</pre>
+            <pre>EFTER
+expiresIn: "30m"</pre>
+          </div>
+          <p>JWT har fast giltighetstid. Riktig inaktivitetsutloggning kräver även klient- eller sessionslogik.</p>
+          <p><strong>STRIDE:</strong> Spoofing · Elevation of Privilege</p>
+        </article>
+
+        <article class="slide-card">
+          <span class="slide-kicker">Slide 4</span>
+          <h3>Krav 2 · Lösenordsvalidering</h3>
+          <p>Bcrypt fanns, men lösenordet validerades inte innan hashning.</p>
+          <pre>passwordRegex =
+/^(?=.*[0-9])(?=.*[!@#$%^&*])
+[A-Za-z0-9!@#$%^&*]{8,}$/</pre>
+          <p>Validering måste ske innan hashning, annars kan svaga lösenord fortfarande sparas säkert men vara enkla att gissa.</p>
+        </article>
+
+        <article class="slide-card">
+          <span class="slide-kicker">Slide 5</span>
+          <h3>Krav 3 · Rate limiting</h3>
+          <p>Utan rate limiting kan en angripare prova många lösenord snabbt.</p>
+          <pre>const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10
+})
+
+app.post("/login", loginLimiter, async (...))</pre>
+          <p>I live-demon är gränsen 5 försök för att det ska gå snabbt att visa.</p>
+        </article>
+
+        <article class="slide-card">
+          <span class="slide-kicker">Slide 6</span>
+          <h3>Kritiskt säkerhetshål</h3>
+          <p>DELETE saknade autentisering i originalet. Vem som helst kunde radera meddelanden.</p>
+          <pre>app.delete("/messages/:id",
+  authenticateUser,
+  async (req, res) => {
+    // ägarskontroll
+  }
+)</pre>
+          <p><strong>STRIDE:</strong> Tampering · Elevation of Privilege</p>
+        </article>
+
+        <article class="slide-card">
+          <span class="slide-kicker">Slide 7</span>
+          <h3>Sammanfattning</h3>
+          <div class="summary-table">
+            <div class="summary-row">
+              <span>Krav 1 · Utloggning</span>
+              <span>Original: token 2h</span>
+              <span>Fix: token 30 min + demo för inaktivitet</span>
+            </div>
+            <div class="summary-row">
+              <span>Krav 2 · Lösenord</span>
+              <span>Original: bcrypt men ingen styrka</span>
+              <span>Fix: bcrypt + regex-validering</span>
+            </div>
+            <div class="summary-row">
+              <span>Krav 3 · Rate limiting</span>
+              <span>Original: saknades</span>
+              <span>Fix: express-rate-limit på /login</span>
+            </div>
+            <div class="summary-row">
+              <span>Krav 4 · Auth</span>
+              <span>Original: DELETE saknade auth</span>
+              <span>Fix: auth + ägarskontroll</span>
+            </div>
+          </div>
+          <p><strong>Viktigaste fynd:</strong> DELETE utan auth = Broken Access Control.</p>
+        </article>
       </section>
 
-      <section class="demo-panel">
-        <h2>Redovisningsläge</h2>
-        <p>Klicka på en knapp och använd texten som stöd när ni visar koden.</p>
-        <div class="controls">
-          <button type="button" class="active" data-demo="login" onclick="showDemo('login')">Login</button>
-          <button type="button" data-demo="password" onclick="showDemo('password')">Lösenord</button>
-          <button type="button" data-demo="rate" onclick="showDemo('rate')">Rate limit</button>
-          <button type="button" data-demo="delete" onclick="showDemo('delete')">Delete</button>
-          <button type="button" data-demo="timer" onclick="showDemo('timer')">Timer</button>
-        </div>
-        <div id="terminal" class="terminal" aria-live="polite"></div>
-        <div class="timer" aria-hidden="true"><span></span></div>
+      <div class="section-title">
+        <h2>Praktisk demo</h2>
+      </div>
+
+      <section class="progress" aria-label="Demo-progress">
+        <div class="progress-step active" id="progress-1">1. Lösenord</div>
+        <div class="progress-step" id="progress-2">2. Rate limit</div>
+        <div class="progress-step" id="progress-3">3. Edit/Delete</div>
+        <div class="progress-step" id="progress-4">4. Auto logout</div>
+      </section>
+
+      <section class="demo-grid">
+        <article class="demo" id="step-1" data-step="1">
+          <span class="tag">Demo 1</span>
+          <h3>Starkt lösenord</h3>
+          <input id="password-input" type="text" value="hej123" aria-label="Testa lösenord" />
+          <div class="mini-list">
+            <div class="check" id="rule-length">Minst 8 tecken</div>
+            <div class="check" id="rule-number">Minst en siffra</div>
+            <div class="check" id="rule-special">Minst ett specialtecken</div>
+          </div>
+          <div class="result" id="password-result">Testa lösenordet ovan.</div>
+          <div class="step-status" id="status-1">Steg 2 är låst tills lösenordet är godkänt.</div>
+        </article>
+
+        <article class="demo locked" id="step-2" data-step="2">
+          <span class="tag">Demo 2</span>
+          <h3>Login med rate limiting</h3>
+          <p>Ange lösenordet <strong>Solen123!</strong>. Fem felaktiga försök låser och stänger sidan.</p>
+          <input id="login-input" type="password" value="fel-losenord" aria-label="Login-lösenord" />
+          <div class="row">
+            <button type="button" id="login-button" onclick="tryLogin()">Försök logga in</button>
+            <button type="button" id="reset-rate-button" onclick="resetRateLimit()">Nollställ</button>
+          </div>
+          <div class="bar" aria-hidden="true"><span id="attempt-bar"></span></div>
+          <div class="result" id="rate-result">5 försök kvar.</div>
+          <div class="step-status" id="status-2">Låst. Klara demo 1 först.</div>
+        </article>
+
+        <article class="demo locked" id="step-3" data-step="3">
+          <span class="tag">Demo 3</span>
+          <h3>Endast inloggad ägare får edit/delete</h3>
+          <div class="row">
+            <button type="button" onclick="setUser('mario')">Logga in som Mario</button>
+            <button type="button" onclick="setUser('sally')">Logga in som Sally</button>
+            <button type="button" onclick="setUser('rasmus')">Logga in som Rasmus</button>
+            <button type="button" onclick="setUser(null)">Logga ut</button>
+          </div>
+          <div class="message-card">
+            <strong>Ägare: Mario</strong>
+            <p id="protected-message">Det här meddelandet får bara Mario ändra eller radera.</p>
+            <div class="message-actions">
+              <button type="button" onclick="editProtectedMessage()">Redigera</button>
+              <button type="button" onclick="deleteProtectedMessage()">Radera</button>
+              <button type="button" onclick="restoreProtectedMessage()">Återställ</button>
+            </div>
+          </div>
+          <div class="result" id="protected-result">Du är inloggad som Mario.</div>
+          <div class="step-status" id="status-3">Låst. Klara demo 2 först.</div>
+        </article>
+
+        <article class="demo locked" id="step-4" data-step="4">
+          <span class="tag">Demo 4</span>
+          <h3>Automatisk utloggning</h3>
+          <p>Redovisningsläge: 30 minuter visas som 30 sekunder så ni hinner visa funktionen live.</p>
+          <div class="row">
+            <button type="button" onclick="startInactivityDemo()">Starta timer</button>
+            <button type="button" onclick="activityPing()">Jag är aktiv</button>
+          </div>
+          <div class="bar" aria-hidden="true"><span id="timer-bar"></span></div>
+          <div class="result" id="timer-result">Starta timern för att visa auto logout.</div>
+          <div class="step-status" id="status-4">Låst. Klara demo 3 först.</div>
+        </article>
       </section>
     </main>
 
     <script>
-      const demos = {
-        login:
-          "POST /login\n" +
-          "1. Användaren skriver username/email och lösenord.\n" +
-          "2. Backend jämför lösenordet med bcrypt.compare().\n" +
-          "3. Vid rätt lösenord skapas en JWT-token med expiresIn: 30m.",
-        password:
-          "POST /register\n" +
-          "Lösenordet måste ha minst 8 tecken, minst en siffra och minst ett specialtecken.\n" +
-          "Sedan körs bcrypt.hash(password, 10) innan användaren sparas.",
-        rate:
-          "Rate limiting\n" +
-          "Login-routen använder express-rate-limit.\n" +
-          "Efter för många försök från samma IP skickas ett stopp-svar istället för att fortsätta testa lösenord.",
-        delete:
-          "DELETE /messages/:id\n" +
-          "1. authenticateUser kräver giltig token.\n" +
-          "2. Servern hämtar meddelandet.\n" +
-          "3. message.user jämförs med req.user._id.\n" +
-          "Resultat: bara ägaren får radera sitt eget meddelande.",
-        timer:
-          "30 minuter inaktivitet\n" +
-          "Frontend lyssnar på aktivitet: click, keydown, scroll, mousemove och touchstart.\n" +
-          "När inget händer på 30 minuter körs logout och användaren får logga in igen.",
-        security:
-          "Säkerhetskedjan\n" +
-          "Helmet skyddar headers.\n" +
-          "JWT visar vem användaren är.\n" +
-          "Bcrypt skyddar lösenord.\n" +
-          "Rate limit bromsar attacker.\n" +
-          "Ägarskontroll stoppar fel användare från att ändra data.",
-        post:
-          "POST /messages\n" +
-          "Frontend skickar Authorization: Bearer <token>.\n" +
-          "Backend lägger req.user._id på meddelandet, så ägarskapet sparas direkt."
+      const correctLoginPassword = "Solen123!"
+      const maxAttempts = 5
+      let attemptsLeft = maxAttempts
+      let currentUser = "mario"
+      let deleted = false
+      let inactivityTimer = null
+      let countdownInterval = null
+      let secondsLeft = 30
+      let highestUnlockedStep = 1
+      const completedSteps = new Set()
+      const displayNames = {
+        mario: "Mario",
+        sally: "Sally",
+        rasmus: "Rasmus"
       }
 
-      const terminal = document.querySelector("#terminal")
-      const buttons = document.querySelectorAll(".controls button")
+      const passwordInput = document.querySelector("#password-input")
+      const loginInput = document.querySelector("#login-input")
 
-      function showDemo(name) {
-        terminal.textContent = demos[name]
+      passwordInput.addEventListener("input", validatePassword)
+      loginInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") tryLogin()
+      })
 
-        buttons.forEach((button) => {
-          const isActive = button.dataset.demo === name
-          button.classList.toggle("active", isActive)
+      setupSteps()
+      validatePassword()
+      updateSession()
+      updateRateLimit()
+
+      function setupSteps() {
+        for (let step = 1; step <= 4; step += 1) {
+          setStepEnabled(step, step === 1)
+          updateProgress(step)
+        }
+      }
+
+      function completeStep(step) {
+        if (completedSteps.has(step)) return
+
+        completedSteps.add(step)
+        document.querySelector(`#status-${step}`).textContent =
+          step < 4 ? `Steg ${step} klart. Steg ${step + 1} är upplåst.` : "Alla steg är klara."
+
+        if (step < 4) {
+          highestUnlockedStep = Math.max(highestUnlockedStep, step + 1)
+          setStepEnabled(step + 1, true)
+          document.querySelector(`#status-${step + 1}`).textContent = "Upplåst. Kör detta steg nu."
+        }
+
+        for (let index = 1; index <= 4; index += 1) {
+          updateProgress(index)
+        }
+      }
+
+      function setStepEnabled(step, enabled) {
+        const card = document.querySelector(`#step-${step}`)
+        card.classList.toggle("locked", !enabled)
+        card.querySelectorAll("button, input, textarea").forEach((control) => {
+          control.disabled = !enabled
         })
       }
 
-      showDemo("login")
+      function updateProgress(step) {
+        const item = document.querySelector(`#progress-${step}`)
+        item.classList.toggle("done", completedSteps.has(step))
+        item.classList.toggle("active", step === highestUnlockedStep && !completedSteps.has(step))
+      }
+
+      function validatePassword() {
+        const value = passwordInput.value
+        const rules = {
+          length: value.length >= 8,
+          number: /[0-9]/.test(value),
+          special: /[!@#$%^&*]/.test(value)
+        }
+
+        setRule("rule-length", rules.length)
+        setRule("rule-number", rules.number)
+        setRule("rule-special", rules.special)
+
+        const ok = rules.length && rules.number && rules.special
+        showResult(
+          "password-result",
+          ok ? "Godkänt lösenord. Nu kan login-demon starta." : "För svagt lösenord. Testa t.ex. Solen123!",
+          ok
+        )
+
+        if (ok) completeStep(1)
+      }
+
+      function setRule(id, done) {
+        document.querySelector(`#${id}`).classList.toggle("done", done)
+      }
+
+      function tryLogin() {
+        if (attemptsLeft <= 0) return
+
+        const password = loginInput.value
+
+        if (password === correctLoginPassword) {
+          currentUser = "mario"
+          attemptsLeft = maxAttempts
+          updateSession()
+          updateRateLimit()
+          showResult("rate-result", "Rätt lösenord. Login lyckades och steg 3 är upplåst.", true)
+          completeStep(2)
+          return
+        }
+
+        attemptsLeft -= 1
+        updateRateLimit()
+
+        if (attemptsLeft === 0) {
+          showResult("rate-result", "5 felaktiga försök. Rate limit aktiverad och sidan stängs.", false)
+          closeWebsiteAfterRateLimit()
+          return
+        }
+
+        showResult("rate-result", `Fel lösenord. ${attemptsLeft} försök kvar innan sidan stängs.`, false)
+      }
+
+      function updateRateLimit() {
+        const percent = (attemptsLeft / maxAttempts) * 100
+        const lockedByAttempts = attemptsLeft === 0
+        document.querySelector("#attempt-bar").style.width = `${percent}%`
+        document.querySelector("#login-button").disabled = lockedByAttempts || highestUnlockedStep < 2
+        document.querySelector("#reset-rate-button").disabled = highestUnlockedStep < 2
+      }
+
+      function resetRateLimit() {
+        attemptsLeft = maxAttempts
+        loginInput.value = "fel-losenord"
+        updateRateLimit()
+        showResult("rate-result", "Rate limit nollställd. 5 försök kvar.", true)
+      }
+
+      function closeWebsiteAfterRateLimit() {
+        setTimeout(() => {
+          window.close()
+
+          if (!window.closed) {
+            document.body.classList.add("site-closed")
+          }
+        }, 700)
+      }
+
+      function restartDemo() {
+        document.body.classList.remove("site-closed")
+        attemptsLeft = maxAttempts
+        currentUser = "mario"
+        deleted = false
+        secondsLeft = 30
+        clearTimeout(inactivityTimer)
+        clearInterval(countdownInterval)
+        updateSession()
+        resetRateLimit()
+        restoreProtectedMessage()
+        renderTimer()
+      }
+
+      function setUser(user) {
+        currentUser = user
+        updateSession()
+        showResult(
+          "protected-result",
+          user ? `Du är inloggad som ${getDisplayName(user)}.` : "Du är utloggad.",
+          user === "mario"
+        )
+      }
+
+      function updateSession() {
+        const label = document.querySelector("#hero-session")
+
+        label.textContent = currentUser ? `INLOGGAD: ${currentUser.toUpperCase()}` : "UTLOGGAD"
+        label.style.background = currentUser ? "var(--mint)" : "var(--coral)"
+      }
+
+      function editProtectedMessage() {
+        if (!currentUser) {
+          showResult("protected-result", "Nekad. Du måste vara inloggad.", false)
+          return
+        }
+
+        if (currentUser !== "mario") {
+          showResult("protected-result", `Nekad. ${getDisplayName(currentUser)} äger inte det här meddelandet.`, false)
+          return
+        }
+
+        deleted = false
+        document.querySelector("#protected-message").textContent = "Mario redigerade sitt eget meddelande."
+        showResult("protected-result", "Tillåtet. Ägarskontrollen fungerar och steg 4 är upplåst.", true)
+        completeStep(3)
+      }
+
+      function deleteProtectedMessage() {
+        if (!currentUser) {
+          showResult("protected-result", "Nekad. Du måste vara inloggad.", false)
+          return
+        }
+
+        if (currentUser !== "mario") {
+          showResult("protected-result", `Nekad. Bara ägaren får radera, inte ${getDisplayName(currentUser)}.`, false)
+          return
+        }
+
+        deleted = true
+        document.querySelector("#protected-message").textContent = "Meddelandet är raderat i demon."
+        showResult("protected-result", "Tillåtet. DELETE skyddas av auth och ägarskap.", true)
+        completeStep(3)
+      }
+
+      function restoreProtectedMessage() {
+        deleted = false
+        document.querySelector("#protected-message").textContent =
+          "Det här meddelandet får bara Mario ändra eller radera."
+        showResult(
+          "protected-result",
+          currentUser ? `Återställt. Du är inloggad som ${getDisplayName(currentUser)}.` : "Återställt. Du är utloggad.",
+          Boolean(currentUser)
+        )
+      }
+
+      function startInactivityDemo() {
+        currentUser = "mario"
+        updateSession()
+        resetInactivityClock()
+      }
+
+      function activityPing() {
+        if (!currentUser) {
+          currentUser = "mario"
+          updateSession()
+        }
+
+        resetInactivityClock()
+        showResult("timer-result", "Aktivitet registrerad. Timern startade om.", true)
+      }
+
+      function resetInactivityClock() {
+        clearTimeout(inactivityTimer)
+        clearInterval(countdownInterval)
+        secondsLeft = 30
+        renderTimer()
+
+        countdownInterval = setInterval(() => {
+          secondsLeft -= 1
+          renderTimer()
+
+          if (secondsLeft <= 0) {
+            clearInterval(countdownInterval)
+          }
+        }, 1000)
+
+        inactivityTimer = setTimeout(() => {
+          currentUser = null
+          updateSession()
+          showResult("timer-result", "Auto logout. Användaren är utloggad efter inaktivitet.", false)
+          clearInterval(countdownInterval)
+          secondsLeft = 0
+          renderTimer()
+          completeStep(4)
+        }, 30000)
+      }
+
+      function renderTimer() {
+        document.querySelector("#timer-bar").style.width = `${(secondsLeft / 30) * 100}%`
+
+        if (secondsLeft > 0) {
+          showResult("timer-result", `${secondsLeft} sekunder kvar till auto logout.`, true)
+        }
+      }
+
+      function showResult(id, text, ok) {
+        const element = document.querySelector(`#${id}`)
+        element.textContent = text
+        element.classList.toggle("ok", ok)
+        element.classList.toggle("bad", !ok)
+        element.classList.toggle("warn", ok === null)
+      }
+
+      function getDisplayName(value) {
+        return displayNames[value] || value.charAt(0).toUpperCase() + value.slice(1)
+      }
     </script>
   </body>
 </html>
