@@ -1,8 +1,11 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { BASE_URL } from "./api"
 import { PostMessage } from "./components/PostMessage"
 import { MessageList } from "./components/MessageList"
 import { AuthModal } from "./components/AuthModal"
+
+const INACTIVITY_TIMEOUT_MS = 30 * 60 * 1000
+const ACTIVITY_EVENTS = ["click", "keydown", "scroll", "mousemove", "touchstart"]
 
 export const App = () => {
   const [loading, setLoading] = useState(false)
@@ -23,14 +26,43 @@ export const App = () => {
     fetchPosts()
   }, [])
 
-    const addNewPost = (newMessage) => {
+  const addNewPost = (newMessage) => {
     setMessageList([newMessage, ...messageList])
   }
 
-  const handleUnauthorized = () => {
+  const logout = useCallback((message = null) => {
     setUser(null)
-    setError("Your session has expired, please log in again")
-  }
+    setError(message)
+  }, [])
+
+  const handleUnauthorized = useCallback(() => {
+    logout("Your session has expired, please log in again")
+  }, [logout])
+
+  useEffect(() => {
+    if (!user) return undefined
+
+    let inactivityTimer
+
+    const resetInactivityTimer = () => {
+      clearTimeout(inactivityTimer)
+      inactivityTimer = setTimeout(() => {
+        logout("You were logged out after 30 minutes of inactivity")
+      }, INACTIVITY_TIMEOUT_MS)
+    }
+
+    resetInactivityTimer()
+    ACTIVITY_EVENTS.forEach((eventName) => {
+      window.addEventListener(eventName, resetInactivityTimer, { passive: true })
+    })
+
+    return () => {
+      clearTimeout(inactivityTimer)
+      ACTIVITY_EVENTS.forEach((eventName) => {
+        window.removeEventListener(eventName, resetInactivityTimer)
+      })
+    }
+  }, [user, logout])
     
   return (
     <>
@@ -38,7 +70,7 @@ export const App = () => {
           <div className="user-info">
             <span>{user.response.username}</span>
             <button
-              onClick={() => setUser(null)}
+              onClick={() => logout()}
               className="auth-button"
             >
               Logout
@@ -67,6 +99,7 @@ export const App = () => {
           onSuccess={(data) => { 
             console.log("User logged in:", data)
             setUser(data) 
+            setError(null)
             setModal(null) 
           }}
         />

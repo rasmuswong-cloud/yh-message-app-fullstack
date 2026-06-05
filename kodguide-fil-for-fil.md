@@ -25,6 +25,7 @@ Vad filen gör:
 - Kopplar backend till MongoDB med Mongoose.
 - Loggar när anslutningen fungerar eller ger fel.
 
+
 Exempel:
 ```js
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/messages"
