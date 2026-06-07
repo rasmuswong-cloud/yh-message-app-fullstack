@@ -6,10 +6,10 @@
     <title>YH Message App Security Demo</title>
     <style>
       :root {
-        --ink: #121212;
+        --ink: #151515;
         --paper: #fff8e8;
         --white: #ffffff;
-        --muted: #5f6673;
+        --muted: #626977;
         --mint: #8ce6bd;
         --blue: #8fcfff;
         --pink: #ffb8cf;
@@ -17,7 +17,7 @@
         --coral: #ff8f70;
         --bad: #ff6b6b;
         --dark: #0d1b2a;
-        --shadow: 7px 7px 0 #121212;
+        --shadow: 7px 7px 0 var(--ink);
       }
 
       * {
@@ -33,8 +33,8 @@
         color: var(--ink);
         font-family: Arial, Helvetica, sans-serif;
         background:
-          linear-gradient(90deg, rgba(18, 18, 18, 0.05) 1px, transparent 1px),
-          linear-gradient(rgba(18, 18, 18, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(21, 21, 21, 0.05) 1px, transparent 1px),
+          linear-gradient(rgba(21, 21, 21, 0.05) 1px, transparent 1px),
           var(--paper);
         background-size: 30px 30px;
       }
@@ -42,21 +42,6 @@
       body.site-closed {
         overflow: hidden;
         background: var(--dark);
-      }
-
-      header,
-      main {
-        width: min(1180px, calc(100% - 32px));
-        margin: 0 auto;
-      }
-
-      header {
-        min-height: 62vh;
-        display: grid;
-        grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
-        gap: 34px;
-        align-items: center;
-        padding: 44px 0 28px;
       }
 
       h1,
@@ -68,8 +53,8 @@
       }
 
       h1 {
-        font-size: clamp(44px, 8vw, 98px);
-        line-height: 0.92;
+        font-size: clamp(36px, 7vw, 84px);
+        line-height: 0.95;
         letter-spacing: 0;
       }
 
@@ -105,7 +90,7 @@
         border: 3px solid var(--ink);
         background: var(--yellow);
         color: var(--ink);
-        padding: 0 16px;
+        padding: 0 15px;
         font-weight: 900;
         cursor: pointer;
         box-shadow: 4px 4px 0 var(--ink);
@@ -125,7 +110,8 @@
       }
 
       input,
-      textarea {
+      textarea,
+      select {
         width: 100%;
         border: 3px solid var(--ink);
         background: #fffdf6;
@@ -149,106 +135,116 @@
         overflow-wrap: anywhere;
       }
 
-      .eyebrow {
-        display: inline-block;
+      .top-deck,
+      main {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      .top-deck {
+        min-height: 100vh;
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        gap: 16px;
+        padding: 18px 0 22px;
+      }
+
+      .deck-bar,
+      .demo-toolbar {
+        border: 4px solid var(--ink);
+        background: var(--white);
+        box-shadow: var(--shadow);
+        padding: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .eyebrow,
+      .slide-kicker,
+      .tag,
+      .status-pill {
+        width: fit-content;
         border: 3px solid var(--ink);
         background: var(--mint);
-        box-shadow: 4px 4px 0 var(--ink);
-        padding: 8px 12px;
-        margin-bottom: 20px;
+        color: var(--ink);
+        padding: 6px 10px;
+        font-size: 14px;
         font-weight: 900;
       }
 
-      .lead {
-        max-width: 680px;
-        margin-top: 22px;
-        font-size: 21px;
+      .status-pill {
+        background: var(--blue);
       }
 
-      .hero-card,
+      .deck-controls,
+      .row,
+      .message-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .icon-button {
+        width: 48px;
+        padding: 0;
+        font-size: 24px;
+        line-height: 1;
+      }
+
+      .slide-counter {
+        min-width: 82px;
+        text-align: center;
+        font-weight: 900;
+      }
+
+      .slide-track {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: 100%;
+        gap: 18px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        scrollbar-width: thin;
+        padding: 8px 8px 16px 0;
+      }
+
       .slide-card,
-      .demo {
+      .demo,
+      .stage-panel {
         border: 4px solid var(--ink);
         background: var(--white);
         box-shadow: var(--shadow);
       }
 
-      .hero-card {
-        padding: 18px;
-        transform: rotate(1deg);
-      }
-
-      .screen {
-        border: 3px solid var(--ink);
-        overflow: hidden;
-        background: #fff;
-      }
-
-      .screen-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        border-bottom: 3px solid var(--ink);
-        background: var(--blue);
-        padding: 12px;
-        font-weight: 900;
-      }
-
-      .session-pill {
-        border: 3px solid var(--ink);
-        background: var(--mint);
-        padding: 6px 10px;
-      }
-
-      .screen-body {
+      .slide-card {
+        scroll-snap-align: start;
+        min-height: calc(100vh - 164px);
+        padding: clamp(18px, 4vw, 38px);
         display: grid;
-        gap: 12px;
-        padding: 14px;
-      }
-
-      .fake-message {
-        border: 3px solid var(--ink);
-        box-shadow: 4px 4px 0 var(--ink);
-        padding: 13px;
-        background: var(--pink);
-      }
-
-      .fake-message:nth-child(2) {
-        background: var(--mint);
-      }
-
-      .fake-message:nth-child(3) {
-        background: var(--yellow);
-      }
-
-      .section-title {
-        margin: 42px 0 18px;
-      }
-
-      .presentation-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-content: center;
         gap: 18px;
       }
 
-      .slide-card {
-        min-height: 320px;
-        padding: 18px;
-        display: flex;
-        flex-direction: column;
-        gap: 14px;
-      }
-
-      .slide-card:nth-child(1) {
-        grid-column: 1 / -1;
-        min-height: 260px;
+      .slide-card:first-child {
         background: var(--dark);
         color: var(--white);
       }
 
-      .slide-card:nth-child(1) p,
-      .slide-card:nth-child(1) li {
+      .slide-card:first-child p,
+      .slide-card:first-child li {
         color: #d7e6f2;
       }
 
@@ -273,23 +269,41 @@
       }
 
       .slide-card:nth-child(7) {
-        grid-column: 1 / -1;
         background: var(--white);
       }
 
-      .slide-kicker,
-      .tag {
-        width: fit-content;
+      .slide-card:first-child .slide-kicker {
+        border-color: var(--white);
+      }
+
+      .slide-card h2 {
+        max-width: 860px;
+      }
+
+      .slide-card p {
+        max-width: 760px;
+        font-size: 19px;
+      }
+
+      .deck-dots {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .deck-dot {
+        width: 18px;
+        height: 18px;
+        min-height: 0;
         border: 3px solid var(--ink);
         background: var(--white);
-        color: var(--ink);
-        padding: 5px 9px;
-        font-size: 14px;
-        font-weight: 900;
+        padding: 0;
+        box-shadow: none;
       }
 
-      .slide-card:nth-child(1) .slide-kicker {
-        border-color: var(--white);
+      .deck-dot.active {
+        background: var(--yellow);
       }
 
       .split {
@@ -300,27 +314,39 @@
 
       .note,
       .result,
-      .step-status {
+      .step-status,
+      .check,
+      .message-card,
+      .script-line {
         border: 3px solid var(--ink);
         background: var(--white);
         color: var(--ink);
         padding: 12px;
+      }
+
+      .note strong,
+      .message-card strong {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .note,
+      .check,
+      .step-status,
+      .script-line {
         font-weight: 800;
       }
 
-      .note strong {
-        display: block;
-        margin-bottom: 4px;
-      }
-
-      .summary-table {
+      .summary-table,
+      .mini-list,
+      .script-list {
         display: grid;
-        gap: 8px;
+        gap: 9px;
       }
 
       .summary-row {
         display: grid;
-        grid-template-columns: 0.8fr 1fr 1fr;
+        grid-template-columns: 0.9fr 1fr 1fr;
         gap: 8px;
       }
 
@@ -331,28 +357,58 @@
         font-weight: 800;
       }
 
-      .progress {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 12px;
-        margin-bottom: 20px;
-      }
-
-      .progress-step {
-        border: 3px solid var(--ink);
-        background: var(--white);
-        box-shadow: 4px 4px 0 var(--ink);
-        padding: 10px;
+      .jump-link {
+        color: var(--ink);
         font-weight: 900;
-        text-align: center;
+        text-decoration: underline;
+        text-decoration-thickness: 3px;
+        text-underline-offset: 4px;
       }
 
-      .progress-step.active {
-        background: var(--yellow);
+      .section-title {
+        margin: 34px 0 18px;
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 18px;
+        flex-wrap: wrap;
       }
 
-      .progress-step.done {
-        background: var(--mint);
+      .section-title p {
+        max-width: 680px;
+      }
+
+      .manual-stage {
+        display: grid;
+        grid-template-columns: minmax(260px, 0.72fr) minmax(0, 1.28fr);
+        gap: 20px;
+        align-items: start;
+      }
+
+      .stage-panel {
+        position: sticky;
+        top: 16px;
+        padding: 18px;
+        display: grid;
+        gap: 14px;
+        background: var(--dark);
+        color: var(--white);
+      }
+
+      .stage-panel p {
+        color: #d7e6f2;
+      }
+
+      .session-box {
+        border: 3px solid var(--white);
+        background: #15283c;
+        padding: 12px;
+        display: grid;
+        gap: 8px;
+      }
+
+      .session-box strong {
+        font-size: 28px;
       }
 
       .demo-grid {
@@ -364,15 +420,10 @@
 
       .demo {
         padding: 18px;
-        min-height: 430px;
+        min-height: 440px;
         display: flex;
         flex-direction: column;
         gap: 14px;
-      }
-
-      .demo.locked {
-        filter: grayscale(0.55);
-        opacity: 0.58;
       }
 
       .demo:nth-child(1) {
@@ -391,19 +442,9 @@
         background: var(--pink);
       }
 
-      .row {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        align-items: center;
-      }
-
       .result {
-        min-height: 54px;
-      }
-
-      .step-status {
-        min-height: auto;
+        min-height: 58px;
+        font-weight: 800;
       }
 
       .ok {
@@ -416,18 +457,6 @@
 
       .warn {
         background: var(--coral);
-      }
-
-      .mini-list {
-        display: grid;
-        gap: 9px;
-      }
-
-      .check {
-        border: 3px solid var(--ink);
-        background: var(--white);
-        padding: 9px;
-        font-weight: 800;
       }
 
       .check.done {
@@ -449,22 +478,19 @@
         transition: width 200ms ease;
       }
 
-      .message-card {
-        border: 3px solid var(--ink);
+      .timeline {
+        display: grid;
+        gap: 8px;
+      }
+
+      .timeline button {
+        width: 100%;
+        text-align: left;
         background: var(--white);
-        padding: 12px;
       }
 
-      .message-card strong {
-        display: block;
-        margin-bottom: 6px;
-      }
-
-      .message-actions {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-top: 12px;
+      .timeline button.active {
+        background: var(--yellow);
       }
 
       .hidden {
@@ -486,7 +512,7 @@
         display: grid;
       }
 
-      body.site-closed header,
+      body.site-closed .top-deck,
       body.site-closed main {
         display: none;
       }
@@ -510,29 +536,38 @@
         width: fit-content;
       }
 
-      @media (max-width: 900px) {
-        header,
-        .presentation-grid,
-        .split,
-        .demo-grid {
+      @media (max-width: 980px) {
+        .manual-stage,
+        .demo-grid,
+        .split {
           grid-template-columns: 1fr;
         }
 
-        .slide-card:nth-child(1),
-        .slide-card:nth-child(7) {
-          grid-column: auto;
+        .stage-panel {
+          position: static;
+        }
+      }
+
+      @media (max-width: 680px) {
+        .top-deck {
+          min-height: auto;
         }
 
-        .progress {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
+        .slide-card {
+          min-height: 72vh;
         }
 
         .summary-row {
           grid-template-columns: 1fr;
         }
 
-        .hero-card {
-          transform: none;
+        .deck-bar {
+          align-items: stretch;
+        }
+
+        .deck-controls {
+          width: 100%;
+          justify-content: space-between;
         }
       }
     </style>
@@ -541,295 +576,296 @@
     <div class="closed-screen" role="dialog" aria-modal="true" aria-labelledby="closed-title">
       <section class="closed-box">
         <span class="slide-kicker">Rate limit aktiverad</span>
-        <h2 id="closed-title">Hemsidan stängdes efter 5 felaktiga försök.</h2>
+        <h2 id="closed-title">Hemsidan st&auml;ngdes efter 5 felaktiga f&ouml;rs&ouml;k.</h2>
         <p>
-          Webbläsare tillåter inte alltid att en sida stängs med JavaScript om den inte öppnades av ett script.
-          Därför låser demon hela sidan som fallback. Försök med rätt lösenord eller starta om demon.
+          Webbl&auml;sare till&aring;ter inte alltid att en sida st&auml;ngs med JavaScript om den inte &ouml;ppnades av
+          ett script. D&auml;rf&ouml;r l&aring;ser demon hela sidan som fallback.
         </p>
         <button type="button" onclick="restartDemo()">Starta om demon</button>
       </section>
     </div>
 
-    <header>
-      <section>
-        <div class="eyebrow">Säkerhetskurs · Fas 2</div>
-        <h1>YH Message App Security Demo</h1>
-        <p class="lead">
-          Presentationen är inbyggd först, så ni kan gå igenom kodförståelse och säkerhetsgranskning
-          innan den praktiska demon börjar.
-        </p>
-      </section>
-
-      <aside class="hero-card">
-        <div class="screen">
-          <div class="screen-top">
-            <span>Messages</span>
-            <span class="session-pill" id="hero-session">INLOGGAD</span>
-          </div>
-          <div class="screen-body">
-            <article class="fake-message">
-              <strong>Mario</strong>
-              <p>Visar lösenordsvalidering och bcrypt.</p>
-            </article>
-            <article class="fake-message">
-              <strong>Sally</strong>
-              <p>Testar rate limiting med riktiga försök.</p>
-            </article>
-            <article class="fake-message">
-              <strong>Rasmus</strong>
-              <p>Visar auth, ägarskap och automatisk utloggning.</p>
-            </article>
-          </div>
+    <section class="top-deck" aria-label="Presentation">
+      <div class="deck-bar">
+        <div class="brand">
+          <span class="eyebrow">S&auml;kerhetskurs &middot; Fas 2</span>
+          <strong>YH Message App Security Demo</strong>
         </div>
-      </aside>
-    </header>
-
-    <main>
-      <div class="section-title">
-        <h2>Presentation</h2>
+        <div class="deck-controls" aria-label="Bildspelskontroller">
+          <button class="icon-button" type="button" onclick="moveSlide(-1)" aria-label="F&ouml;reg&aring;ende slide">&larr;</button>
+          <span class="slide-counter" id="slide-counter">1 / 7</span>
+          <button class="icon-button" type="button" onclick="moveSlide(1)" aria-label="N&auml;sta slide">&rarr;</button>
+          <a class="jump-link" href="#manual-demo">Till praktisk demo</a>
+        </div>
       </div>
 
-      <section class="presentation-grid" aria-label="Innehåll från fas 2-presentation">
+      <div class="slide-track" id="slide-track" tabindex="0">
         <article class="slide-card">
           <span class="slide-kicker">Slide 1</span>
-          <h2>Säkerhetskurs Fas 2</h2>
-          <p>Kodförståelse & säkerhetsgranskning av YH Message App.</p>
-          <p>Express + MongoDB + React · JWT Auth</p>
-          <p><strong>Mario · Rasmus · Sally</strong></p>
+          <h1>S&auml;kerhetskurs Fas 2</h1>
+          <p>Kodf&ouml;rst&aring;else och s&auml;kerhetsgranskning av YH Message App.</p>
+          <p>Express + MongoDB + React &middot; JWT Auth</p>
+          <p><strong>Mario &middot; Rasmus &middot; Sally</strong></p>
         </article>
 
         <article class="slide-card">
           <span class="slide-kicker">Slide 2</span>
-          <h3>Vad vi granskade</h3>
+          <h2>Vad vi granskade</h2>
           <div class="mini-list">
-            <div class="note"><strong>backend/server.js</strong>Alla API-routes: register, login och meddelanden.</div>
+            <div class="note"><strong>backend/server.js</strong>API-routes f&ouml;r register, login och meddelanden.</div>
             <div class="note"><strong>backend/middleware/auth.js</strong>JWT-verifiering som skyddar privata routes.</div>
-            <div class="note"><strong>backend/models/User.js</strong>Användarschema där lösenord lagras som bcrypt-hash.</div>
+            <div class="note"><strong>backend/models/User.js</strong>Anv&auml;ndarschema d&auml;r l&ouml;senord lagras som bcrypt-hash.</div>
           </div>
-          <p>Fokus: backend = Zon 2 i ESTRID, där logik och säkerhetsbeslut sker.</p>
+          <p>Fokus: backend = Zon 2 i ESTRID, d&auml;r logik och s&auml;kerhetsbeslut sker.</p>
         </article>
 
         <article class="slide-card">
           <span class="slide-kicker">Slide 3</span>
-          <h3>Krav 1 · Automatisk utloggning</h3>
+          <h2>Krav 1 &middot; Automatisk utloggning</h2>
           <div class="split">
-            <pre>FÖRE
+            <pre>F&Ouml;RE
 expiresIn: "2h"</pre>
             <pre>EFTER
 expiresIn: "30m"</pre>
           </div>
-          <p>JWT har fast giltighetstid. Riktig inaktivitetsutloggning kräver även klient- eller sessionslogik.</p>
-          <p><strong>STRIDE:</strong> Spoofing · Elevation of Privilege</p>
+          <p>JWT har fast giltighetstid. Riktig inaktivitetsutloggning kr&auml;ver &auml;ven klient- eller sessionslogik.</p>
+          <p><strong>STRIDE:</strong> Spoofing &middot; Elevation of Privilege</p>
         </article>
 
         <article class="slide-card">
           <span class="slide-kicker">Slide 4</span>
-          <h3>Krav 2 · Lösenordsvalidering</h3>
-          <p>Bcrypt fanns, men lösenordet validerades inte innan hashning.</p>
+          <h2>Krav 2 &middot; L&ouml;senordsvalidering</h2>
+          <p>Bcrypt fanns, men l&ouml;senordet validerades inte innan hashning.</p>
           <pre>passwordRegex =
 /^(?=.*[0-9])(?=.*[!@#$%^&*])
 [A-Za-z0-9!@#$%^&*]{8,}$/</pre>
-          <p>Validering måste ske innan hashning, annars kan svaga lösenord fortfarande sparas säkert men vara enkla att gissa.</p>
+          <p>Validering m&aring;ste ske innan hashning. Annars kan svaga l&ouml;senord sparas s&auml;kert men vara enkla att gissa.</p>
         </article>
 
         <article class="slide-card">
           <span class="slide-kicker">Slide 5</span>
-          <h3>Krav 3 · Rate limiting</h3>
-          <p>Utan rate limiting kan en angripare prova många lösenord snabbt.</p>
+          <h2>Krav 3 &middot; Rate limiting</h2>
+          <p>Utan rate limiting kan en angripare prova m&aring;nga l&ouml;senord snabbt.</p>
           <pre>const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 10
 })
 
 app.post("/login", loginLimiter, async (...))</pre>
-          <p>I live-demon är gränsen 5 försök för att det ska gå snabbt att visa.</p>
+          <p>I live-demon &auml;r gr&auml;nsen 5 f&ouml;rs&ouml;k f&ouml;r att funktionen ska g&aring; snabbt att visa.</p>
         </article>
 
         <article class="slide-card">
           <span class="slide-kicker">Slide 6</span>
-          <h3>Kritiskt säkerhetshål</h3>
+          <h2>Kritiskt s&auml;kerhetsh&aring;l</h2>
           <p>DELETE saknade autentisering i originalet. Vem som helst kunde radera meddelanden.</p>
           <pre>app.delete("/messages/:id",
   authenticateUser,
   async (req, res) => {
-    // ägarskontroll
+    // &auml;garskontroll
   }
 )</pre>
-          <p><strong>STRIDE:</strong> Tampering · Elevation of Privilege</p>
+          <p><strong>STRIDE:</strong> Tampering &middot; Elevation of Privilege</p>
         </article>
 
         <article class="slide-card">
           <span class="slide-kicker">Slide 7</span>
-          <h3>Sammanfattning</h3>
+          <h2>Sammanfattning</h2>
           <div class="summary-table">
             <div class="summary-row">
-              <span>Krav 1 · Utloggning</span>
+              <span>Krav 1 &middot; Utloggning</span>
               <span>Original: token 2h</span>
-              <span>Fix: token 30 min + demo för inaktivitet</span>
+              <span>Fix: token 30 min + demo f&ouml;r inaktivitet</span>
             </div>
             <div class="summary-row">
-              <span>Krav 2 · Lösenord</span>
+              <span>Krav 2 &middot; L&ouml;senord</span>
               <span>Original: bcrypt men ingen styrka</span>
               <span>Fix: bcrypt + regex-validering</span>
             </div>
             <div class="summary-row">
-              <span>Krav 3 · Rate limiting</span>
+              <span>Krav 3 &middot; Rate limiting</span>
               <span>Original: saknades</span>
-              <span>Fix: express-rate-limit på /login</span>
+              <span>Fix: express-rate-limit p&aring; /login</span>
             </div>
             <div class="summary-row">
-              <span>Krav 4 · Auth</span>
+              <span>Krav 4 &middot; Auth</span>
               <span>Original: DELETE saknade auth</span>
-              <span>Fix: auth + ägarskontroll</span>
+              <span>Fix: auth + &auml;garskontroll</span>
             </div>
           </div>
           <p><strong>Viktigaste fynd:</strong> DELETE utan auth = Broken Access Control.</p>
         </article>
-      </section>
-
-      <div class="section-title">
-        <h2>Praktisk demo</h2>
       </div>
 
-      <section class="progress" aria-label="Demo-progress">
-        <div class="progress-step active" id="progress-1">1. Lösenord</div>
-        <div class="progress-step" id="progress-2">2. Rate limit</div>
-        <div class="progress-step" id="progress-3">3. Edit/Delete</div>
-        <div class="progress-step" id="progress-4">4. Auto logout</div>
-      </section>
+      <div class="deck-dots" id="deck-dots" aria-label="V&auml;lj slide"></div>
+    </section>
 
-      <section class="demo-grid">
-        <article class="demo" id="step-1" data-step="1">
-          <span class="tag">Demo 1</span>
-          <h3>Starkt lösenord</h3>
-          <input id="password-input" type="text" value="hej123" aria-label="Testa lösenord" />
-          <div class="mini-list">
-            <div class="check" id="rule-length">Minst 8 tecken</div>
-            <div class="check" id="rule-number">Minst en siffra</div>
-            <div class="check" id="rule-special">Minst ett specialtecken</div>
-          </div>
-          <div class="result" id="password-result">Testa lösenordet ovan.</div>
-          <div class="step-status" id="status-1">Steg 2 är låst tills lösenordet är godkänt.</div>
-        </article>
+    <main id="manual-demo">
+      <div class="section-title">
+        <div>
+          <h2>Praktisk demo</h2>
+          <p>H&auml;r kan ni manuellt visa varje s&auml;kerhetskrav utan att beh&ouml;va starta backend eller frontend.</p>
+        </div>
+      </div>
 
-        <article class="demo locked" id="step-2" data-step="2">
-          <span class="tag">Demo 2</span>
-          <h3>Login med rate limiting</h3>
-          <p>Ange lösenordet <strong>Solen123!</strong>. Fem felaktiga försök låser och stänger sidan.</p>
-          <input id="login-input" type="password" value="fel-losenord" aria-label="Login-lösenord" />
-          <div class="row">
-            <button type="button" id="login-button" onclick="tryLogin()">Försök logga in</button>
-            <button type="button" id="reset-rate-button" onclick="resetRateLimit()">Nollställ</button>
+      <section class="manual-stage">
+        <aside class="stage-panel" aria-label="Demostatus">
+          <span class="slide-kicker">Live-status</span>
+          <div class="session-box">
+            <span>Aktuell anv&auml;ndare</span>
+            <strong id="session-user">Mario</strong>
+            <span id="session-detail">Inloggad och &auml;gare till testmeddelandet.</span>
           </div>
-          <div class="bar" aria-hidden="true"><span id="attempt-bar"></span></div>
-          <div class="result" id="rate-result">5 försök kvar.</div>
-          <div class="step-status" id="status-2">Låst. Klara demo 1 först.</div>
-        </article>
+          <div class="script-list">
+            <div class="script-line" id="script-password">1. Visa starkt och svagt l&ouml;senord.</div>
+            <div class="script-line" id="script-rate">2. Testa fel login fem g&aring;nger.</div>
+            <div class="script-line" id="script-access">3. Byt anv&auml;ndare och prova edit/delete.</div>
+            <div class="script-line" id="script-logout">4. Starta timer och v&auml;nta p&aring; auto logout.</div>
+          </div>
+          <button type="button" onclick="restartDemo()">Nollst&auml;ll hela demon</button>
+        </aside>
 
-        <article class="demo locked" id="step-3" data-step="3">
-          <span class="tag">Demo 3</span>
-          <h3>Endast inloggad ägare får edit/delete</h3>
-          <div class="row">
-            <button type="button" onclick="setUser('mario')">Logga in som Mario</button>
-            <button type="button" onclick="setUser('sally')">Logga in som Sally</button>
-            <button type="button" onclick="setUser('rasmus')">Logga in som Rasmus</button>
-            <button type="button" onclick="setUser(null)">Logga ut</button>
-          </div>
-          <div class="message-card">
-            <strong>Ägare: Mario</strong>
-            <p id="protected-message">Det här meddelandet får bara Mario ändra eller radera.</p>
-            <div class="message-actions">
-              <button type="button" onclick="editProtectedMessage()">Redigera</button>
-              <button type="button" onclick="deleteProtectedMessage()">Radera</button>
-              <button type="button" onclick="restoreProtectedMessage()">Återställ</button>
+        <section class="demo-grid">
+          <article class="demo" id="step-password">
+            <span class="tag">Manuell funktion 1</span>
+            <h3>L&ouml;senordsvalidering</h3>
+            <input id="password-input" type="text" value="hej123" aria-label="Testa l&ouml;senord" />
+            <div class="row">
+              <button type="button" onclick="setPasswordSample('weak')">Svagt exempel</button>
+              <button type="button" onclick="setPasswordSample('strong')">Starkt exempel</button>
             </div>
-          </div>
-          <div class="result" id="protected-result">Du är inloggad som Mario.</div>
-          <div class="step-status" id="status-3">Låst. Klara demo 2 först.</div>
-        </article>
+            <div class="mini-list">
+              <div class="check" id="rule-length">Minst 8 tecken</div>
+              <div class="check" id="rule-number">Minst en siffra</div>
+              <div class="check" id="rule-special">Minst ett specialtecken</div>
+            </div>
+            <div class="result" id="password-result">Testa l&ouml;senordet ovan.</div>
+          </article>
 
-        <article class="demo locked" id="step-4" data-step="4">
-          <span class="tag">Demo 4</span>
-          <h3>Automatisk utloggning</h3>
-          <p>Redovisningsläge: 30 minuter visas som 30 sekunder så ni hinner visa funktionen live.</p>
-          <div class="row">
-            <button type="button" onclick="startInactivityDemo()">Starta timer</button>
-            <button type="button" onclick="activityPing()">Jag är aktiv</button>
-          </div>
-          <div class="bar" aria-hidden="true"><span id="timer-bar"></span></div>
-          <div class="result" id="timer-result">Starta timern för att visa auto logout.</div>
-          <div class="step-status" id="status-4">Låst. Klara demo 3 först.</div>
-        </article>
+          <article class="demo" id="step-rate">
+            <span class="tag">Manuell funktion 2</span>
+            <h3>Login med rate limiting</h3>
+            <p>Ange l&ouml;senordet <strong>Solen123!</strong>. Fem felaktiga f&ouml;rs&ouml;k l&aring;ser sidan.</p>
+            <input id="login-input" type="password" value="fel-losenord" aria-label="Login-l&ouml;senord" />
+            <div class="row">
+              <button type="button" onclick="tryLogin()">F&ouml;rs&ouml;k logga in</button>
+              <button type="button" onclick="setLoginSample('correct')">Fyll i r&auml;tt</button>
+              <button type="button" onclick="resetRateLimit()">Nollst&auml;ll</button>
+            </div>
+            <div class="bar" aria-hidden="true"><span id="attempt-bar"></span></div>
+            <div class="result" id="rate-result">5 f&ouml;rs&ouml;k kvar.</div>
+          </article>
+
+          <article class="demo" id="step-access">
+            <span class="tag">Manuell funktion 3</span>
+            <h3>Auth och &auml;garskap</h3>
+            <div class="row">
+              <button type="button" onclick="setUser('mario')">Mario</button>
+              <button type="button" onclick="setUser('sally')">Sally</button>
+              <button type="button" onclick="setUser('rasmus')">Rasmus</button>
+              <button type="button" onclick="setUser(null)">Logga ut</button>
+            </div>
+            <div class="message-card">
+              <strong>&Auml;gare: Mario</strong>
+              <p id="protected-message">Det h&auml;r meddelandet f&aring;r bara Mario &auml;ndra eller radera.</p>
+              <div class="message-actions">
+                <button type="button" onclick="editProtectedMessage()">Redigera</button>
+                <button type="button" onclick="deleteProtectedMessage()">Radera</button>
+                <button type="button" onclick="restoreProtectedMessage()">&Aring;terst&auml;ll</button>
+              </div>
+            </div>
+            <div class="result" id="protected-result">Du &auml;r inloggad som Mario.</div>
+          </article>
+
+          <article class="demo" id="step-logout">
+            <span class="tag">Manuell funktion 4</span>
+            <h3>Automatisk utloggning</h3>
+            <p>Redovisningsl&auml;ge: 30 minuter visas som 30 sekunder s&aring; funktionen kan visas live.</p>
+            <div class="row">
+              <button type="button" onclick="startInactivityDemo()">Starta timer</button>
+              <button type="button" onclick="activityPing()">Jag &auml;r aktiv</button>
+              <button type="button" onclick="forceLogout()">Logga ut direkt</button>
+            </div>
+            <div class="bar" aria-hidden="true"><span id="timer-bar"></span></div>
+            <div class="result" id="timer-result">Starta timern f&ouml;r att visa auto logout.</div>
+          </article>
+        </section>
       </section>
     </main>
 
     <script>
       const correctLoginPassword = "Solen123!"
       const maxAttempts = 5
-      let attemptsLeft = maxAttempts
-      let currentUser = "mario"
-      let deleted = false
-      let inactivityTimer = null
-      let countdownInterval = null
-      let secondsLeft = 30
-      let highestUnlockedStep = 1
-      const completedSteps = new Set()
+      const slideTrack = document.querySelector("#slide-track")
+      const slides = Array.from(document.querySelectorAll(".slide-card"))
+      const dotsContainer = document.querySelector("#deck-dots")
+      const passwordInput = document.querySelector("#password-input")
+      const loginInput = document.querySelector("#login-input")
       const displayNames = {
         mario: "Mario",
         sally: "Sally",
         rasmus: "Rasmus"
       }
 
-      const passwordInput = document.querySelector("#password-input")
-      const loginInput = document.querySelector("#login-input")
+      let currentSlide = 0
+      let attemptsLeft = maxAttempts
+      let currentUser = "mario"
+      let inactivityTimer = null
+      let countdownInterval = null
+      let secondsLeft = 30
+
+      slides.forEach((_, index) => {
+        const dot = document.createElement("button")
+        dot.type = "button"
+        dot.className = "deck-dot"
+        dot.setAttribute("aria-label", `Gå till slide ${index + 1}`)
+        dot.addEventListener("click", () => goToSlide(index))
+        dotsContainer.appendChild(dot)
+      })
 
       passwordInput.addEventListener("input", validatePassword)
       loginInput.addEventListener("keydown", (event) => {
         if (event.key === "Enter") tryLogin()
       })
 
-      setupSteps()
+      slideTrack.addEventListener("scroll", syncSlideFromScroll, { passive: true })
+      slideTrack.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowRight") moveSlide(1)
+        if (event.key === "ArrowLeft") moveSlide(-1)
+      })
+
       validatePassword()
       updateSession()
       updateRateLimit()
+      updateSlideUi()
+      renderTimer(false)
 
-      function setupSteps() {
-        for (let step = 1; step <= 4; step += 1) {
-          setStepEnabled(step, step === 1)
-          updateProgress(step)
-        }
+      function moveSlide(direction) {
+        goToSlide(currentSlide + direction)
       }
 
-      function completeStep(step) {
-        if (completedSteps.has(step)) return
-
-        completedSteps.add(step)
-        document.querySelector(`#status-${step}`).textContent =
-          step < 4 ? `Steg ${step} klart. Steg ${step + 1} är upplåst.` : "Alla steg är klara."
-
-        if (step < 4) {
-          highestUnlockedStep = Math.max(highestUnlockedStep, step + 1)
-          setStepEnabled(step + 1, true)
-          document.querySelector(`#status-${step + 1}`).textContent = "Upplåst. Kör detta steg nu."
-        }
-
-        for (let index = 1; index <= 4; index += 1) {
-          updateProgress(index)
-        }
+      function goToSlide(index) {
+        currentSlide = Math.max(0, Math.min(slides.length - 1, index))
+        slides[currentSlide].scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" })
+        updateSlideUi()
       }
 
-      function setStepEnabled(step, enabled) {
-        const card = document.querySelector(`#step-${step}`)
-        card.classList.toggle("locked", !enabled)
-        card.querySelectorAll("button, input, textarea").forEach((control) => {
-          control.disabled = !enabled
+      function syncSlideFromScroll() {
+        const width = slideTrack.clientWidth || 1
+        currentSlide = Math.round(slideTrack.scrollLeft / width)
+        updateSlideUi()
+      }
+
+      function updateSlideUi() {
+        document.querySelector("#slide-counter").textContent = `${currentSlide + 1} / ${slides.length}`
+        document.querySelectorAll(".deck-dot").forEach((dot, index) => {
+          dot.classList.toggle("active", index === currentSlide)
         })
       }
 
-      function updateProgress(step) {
-        const item = document.querySelector(`#progress-${step}`)
-        item.classList.toggle("done", completedSteps.has(step))
-        item.classList.toggle("active", step === highestUnlockedStep && !completedSteps.has(step))
+      function setPasswordSample(type) {
+        passwordInput.value = type === "strong" ? correctLoginPassword : "hej123"
+        validatePassword()
       }
 
       function validatePassword() {
@@ -847,15 +883,18 @@ app.post("/login", loginLimiter, async (...))</pre>
         const ok = rules.length && rules.number && rules.special
         showResult(
           "password-result",
-          ok ? "Godkänt lösenord. Nu kan login-demon starta." : "För svagt lösenord. Testa t.ex. Solen123!",
+          ok ? "Godk&auml;nt l&ouml;senord. Det hade f&aring;tt hashats med bcrypt." : "F&ouml;r svagt l&ouml;senord. Testa t.ex. Solen123!",
           ok
         )
-
-        if (ok) completeStep(1)
+        markScript("script-password", ok)
       }
 
       function setRule(id, done) {
         document.querySelector(`#${id}`).classList.toggle("done", done)
+      }
+
+      function setLoginSample(type) {
+        loginInput.value = type === "correct" ? correctLoginPassword : "fel-losenord"
       }
 
       function tryLogin() {
@@ -868,8 +907,8 @@ app.post("/login", loginLimiter, async (...))</pre>
           attemptsLeft = maxAttempts
           updateSession()
           updateRateLimit()
-          showResult("rate-result", "Rätt lösenord. Login lyckades och steg 3 är upplåst.", true)
-          completeStep(2)
+          showResult("rate-result", "R&auml;tt l&ouml;senord. Login lyckades och f&ouml;rs&ouml;ken nollst&auml;lldes.", true)
+          markScript("script-rate", true)
           return
         }
 
@@ -877,27 +916,25 @@ app.post("/login", loginLimiter, async (...))</pre>
         updateRateLimit()
 
         if (attemptsLeft === 0) {
-          showResult("rate-result", "5 felaktiga försök. Rate limit aktiverad och sidan stängs.", false)
+          showResult("rate-result", "5 felaktiga f&ouml;rs&ouml;k. Rate limit aktiverad och sidan st&auml;ngs.", false)
+          markScript("script-rate", true)
           closeWebsiteAfterRateLimit()
           return
         }
 
-        showResult("rate-result", `Fel lösenord. ${attemptsLeft} försök kvar innan sidan stängs.`, false)
+        showResult("rate-result", `Fel l&ouml;senord. ${attemptsLeft} f&ouml;rs&ouml;k kvar innan sidan st&auml;ngs.`, false)
       }
 
       function updateRateLimit() {
         const percent = (attemptsLeft / maxAttempts) * 100
-        const lockedByAttempts = attemptsLeft === 0
         document.querySelector("#attempt-bar").style.width = `${percent}%`
-        document.querySelector("#login-button").disabled = lockedByAttempts || highestUnlockedStep < 2
-        document.querySelector("#reset-rate-button").disabled = highestUnlockedStep < 2
       }
 
       function resetRateLimit() {
         attemptsLeft = maxAttempts
         loginInput.value = "fel-losenord"
         updateRateLimit()
-        showResult("rate-result", "Rate limit nollställd. 5 försök kvar.", true)
+        showResult("rate-result", "Rate limit nollst&auml;lld. 5 f&ouml;rs&ouml;k kvar.", true)
       }
 
       function closeWebsiteAfterRateLimit() {
@@ -914,14 +951,19 @@ app.post("/login", loginLimiter, async (...))</pre>
         document.body.classList.remove("site-closed")
         attemptsLeft = maxAttempts
         currentUser = "mario"
-        deleted = false
         secondsLeft = 30
         clearTimeout(inactivityTimer)
         clearInterval(countdownInterval)
+        passwordInput.value = "hej123"
+        loginInput.value = "fel-losenord"
         updateSession()
-        resetRateLimit()
-        restoreProtectedMessage()
-        renderTimer()
+        updateRateLimit()
+        restoreProtectedMessage(false)
+        validatePassword()
+        renderTimer(false)
+        showResult("rate-result", "5 f&ouml;rs&ouml;k kvar.", true)
+        showResult("timer-result", "Starta timern f&ouml;r att visa auto logout.", true)
+        document.querySelectorAll(".script-line").forEach((item) => item.classList.remove("ok", "bad", "warn"))
       }
 
       function setUser(user) {
@@ -929,61 +971,69 @@ app.post("/login", loginLimiter, async (...))</pre>
         updateSession()
         showResult(
           "protected-result",
-          user ? `Du är inloggad som ${getDisplayName(user)}.` : "Du är utloggad.",
+          user ? `Du &auml;r inloggad som ${getDisplayName(user)}.` : "Du &auml;r utloggad.",
           user === "mario"
         )
       }
 
       function updateSession() {
-        const label = document.querySelector("#hero-session")
-
-        label.textContent = currentUser ? `INLOGGAD: ${currentUser.toUpperCase()}` : "UTLOGGAD"
-        label.style.background = currentUser ? "var(--mint)" : "var(--coral)"
+        const userLabel = document.querySelector("#session-user")
+        const detail = document.querySelector("#session-detail")
+        userLabel.textContent = currentUser ? getDisplayName(currentUser) : "Utloggad"
+        detail.innerHTML = currentUser
+          ? currentUser === "mario"
+            ? "Inloggad och &auml;gare till testmeddelandet."
+            : "Inloggad men inte &auml;gare till testmeddelandet."
+          : "Ingen token finns i sessionen."
       }
 
       function editProtectedMessage() {
         if (!currentUser) {
-          showResult("protected-result", "Nekad. Du måste vara inloggad.", false)
+          showResult("protected-result", "Nekad. Du m&aring;ste vara inloggad.", false)
+          markScript("script-access", true)
           return
         }
 
         if (currentUser !== "mario") {
-          showResult("protected-result", `Nekad. ${getDisplayName(currentUser)} äger inte det här meddelandet.`, false)
+          showResult("protected-result", `Nekad. ${getDisplayName(currentUser)} &auml;ger inte det h&auml;r meddelandet.`, false)
+          markScript("script-access", true)
           return
         }
 
-        deleted = false
         document.querySelector("#protected-message").textContent = "Mario redigerade sitt eget meddelande."
-        showResult("protected-result", "Tillåtet. Ägarskontrollen fungerar och steg 4 är upplåst.", true)
-        completeStep(3)
+        showResult("protected-result", "Till&aring;tet. Auth och &auml;garskontroll fungerar.", true)
+        markScript("script-access", true)
       }
 
       function deleteProtectedMessage() {
         if (!currentUser) {
-          showResult("protected-result", "Nekad. Du måste vara inloggad.", false)
+          showResult("protected-result", "Nekad. Du m&aring;ste vara inloggad.", false)
+          markScript("script-access", true)
           return
         }
 
         if (currentUser !== "mario") {
-          showResult("protected-result", `Nekad. Bara ägaren får radera, inte ${getDisplayName(currentUser)}.`, false)
+          showResult("protected-result", `Nekad. Bara &auml;garen f&aring;r radera, inte ${getDisplayName(currentUser)}.`, false)
+          markScript("script-access", true)
           return
         }
 
-        deleted = true
-        document.querySelector("#protected-message").textContent = "Meddelandet är raderat i demon."
-        showResult("protected-result", "Tillåtet. DELETE skyddas av auth och ägarskap.", true)
-        completeStep(3)
+        document.querySelector("#protected-message").innerHTML = "Meddelandet &auml;r raderat i demon."
+        showResult("protected-result", "Till&aring;tet. DELETE skyddas av auth och &auml;garskap.", true)
+        markScript("script-access", true)
       }
 
-      function restoreProtectedMessage() {
-        deleted = false
-        document.querySelector("#protected-message").textContent =
-          "Det här meddelandet får bara Mario ändra eller radera."
-        showResult(
-          "protected-result",
-          currentUser ? `Återställt. Du är inloggad som ${getDisplayName(currentUser)}.` : "Återställt. Du är utloggad.",
-          Boolean(currentUser)
-        )
+      function restoreProtectedMessage(showMessage = true) {
+        document.querySelector("#protected-message").innerHTML =
+          "Det h&auml;r meddelandet f&aring;r bara Mario &auml;ndra eller radera."
+
+        if (showMessage) {
+          showResult(
+            "protected-result",
+            currentUser ? `&Aring;terst&auml;llt. Du &auml;r inloggad som ${getDisplayName(currentUser)}.` : "&Aring;terst&auml;llt. Du &auml;r utloggad.",
+            Boolean(currentUser)
+          )
+        }
       }
 
       function startInactivityDemo() {
@@ -1006,42 +1056,49 @@ app.post("/login", loginLimiter, async (...))</pre>
         clearTimeout(inactivityTimer)
         clearInterval(countdownInterval)
         secondsLeft = 30
-        renderTimer()
+        renderTimer(true)
 
         countdownInterval = setInterval(() => {
           secondsLeft -= 1
-          renderTimer()
+          renderTimer(true)
 
           if (secondsLeft <= 0) {
             clearInterval(countdownInterval)
           }
         }, 1000)
 
-        inactivityTimer = setTimeout(() => {
-          currentUser = null
-          updateSession()
-          showResult("timer-result", "Auto logout. Användaren är utloggad efter inaktivitet.", false)
-          clearInterval(countdownInterval)
-          secondsLeft = 0
-          renderTimer()
-          completeStep(4)
-        }, 30000)
+        inactivityTimer = setTimeout(forceLogout, 30000)
       }
 
-      function renderTimer() {
+      function forceLogout() {
+        currentUser = null
+        updateSession()
+        showResult("timer-result", "Auto logout. Anv&auml;ndaren &auml;r utloggad efter inaktivitet.", false)
+        clearTimeout(inactivityTimer)
+        clearInterval(countdownInterval)
+        secondsLeft = 0
+        renderTimer(false)
+        markScript("script-logout", true)
+      }
+
+      function renderTimer(showText) {
         document.querySelector("#timer-bar").style.width = `${(secondsLeft / 30) * 100}%`
 
-        if (secondsLeft > 0) {
+        if (showText && secondsLeft > 0) {
           showResult("timer-result", `${secondsLeft} sekunder kvar till auto logout.`, true)
         }
       }
 
       function showResult(id, text, ok) {
         const element = document.querySelector(`#${id}`)
-        element.textContent = text
-        element.classList.toggle("ok", ok)
-        element.classList.toggle("bad", !ok)
+        element.innerHTML = text
+        element.classList.toggle("ok", ok === true)
+        element.classList.toggle("bad", ok === false)
         element.classList.toggle("warn", ok === null)
+      }
+
+      function markScript(id, done) {
+        document.querySelector(`#${id}`).classList.toggle("ok", done)
       }
 
       function getDisplayName(value) {
